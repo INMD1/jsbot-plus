@@ -43,6 +43,7 @@ client.once('ready', () => {
 	setTimeout(function () {}, 4000);
 });
 
+//명령어 불려오기
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
 
