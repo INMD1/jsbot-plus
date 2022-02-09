@@ -36,12 +36,17 @@ module.exports = {
 		}
 
 		const result = {
-			color: 0x0099ff,
+			color: '#FF0000',
 			title: interaction.options.getString('string') + '검색 결과',
 			fields: embed,
 			timestamp: new Date(),
 		};
-		await interaction.reply({ embeds: [result] });
+		const message =  await interaction.reply({ embeds: [result], fetchReply: true  });
+		message.react('1️⃣')
+		.then(() => message.react('2️⃣'))
+		.then(() => message.react('3️⃣'))
+		.then(() => message.react('4️⃣'))
+		.catch(error => console.error('오류가 생겨버렸서요.', error));
 	},
 
 };
