@@ -1,6 +1,8 @@
 const fs = require('fs');
 const { Client, Collection, Intents } = require('discord.js');
 const {token} = require('./jsonfile/config.json');
+const { Player } = require("discord-player");
+
 const client = new Client({
     intents: [
 		Intents.FLAGS.GUILD_MEMBERS, 
@@ -11,6 +13,7 @@ const client = new Client({
     partials: ["MESSAGE", "CHANNEL"],
 })
 const os = require('os');
+global.player = new Player(client);
 
 //커맨드 명령어들 불러오는 코드
 client.commands = new Collection();
@@ -18,6 +21,7 @@ client.commands = new Collection();
 const publicfile = fs.readdirSync('./public').filter(file => file.endsWith('.js'));
 
 // 서버에서 사용할 명령어 준비
+
 for (const file of publicfile) {
 	const command = require(`./public/${file}`);
 	client.commands.set(command.data.name, command);

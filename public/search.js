@@ -1,9 +1,7 @@
 const {SlashCommandBuilder} = require('@discordjs/builders');
 const {MessageActionRow , MessageButton } = require('discord.js');
-const { joinVoiceChannel, createAudioPlayer, createAudioResource, StreamType, AudioPlayerStatus, generateDependencyReport  } = require('@discordjs/voice');
-
 const yts = require('yt-search');
-const ytdl = require('ytdl-core-discord');
+
 const fs = require('fs')
 module.exports = {
 	data: new SlashCommandBuilder()
