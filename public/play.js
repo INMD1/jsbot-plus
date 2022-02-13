@@ -38,7 +38,7 @@ module.exports = {
                 queue.play(track);
                 return await interaction.followUp({ content: `✅ | 노래를 재생할게요 **${track.title}**!` });
             }else{ // 틀어져 있으면 추가하는 걸로 넘어감
-                queue.addTrack(track);
+                json.addTrack(track);
                 return await interaction.followUp({ content: `✅ | 노래를 추가할게요 **${track.title}**!` });
             }
         }
