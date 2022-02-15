@@ -64,7 +64,7 @@ client.on('interactionCreate', async interaction => {
 		await command.execute(interaction);
 	} catch (error) {
 		console.error(error);
-		await interaction.reply({
+		interaction.reply({
 			content: '오류가 발생했서요...\n관리자 또는 운영자한데 문의해주세요.',
 			ephemeral: true
 		});

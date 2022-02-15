@@ -1,6 +1,7 @@
 const axios = require('axios');
 const { appletoken } = require('../jsonfile/config.json');
 
+
 exports.playlist =  async function (inpout) {
     let json = []
     let baseurl = "https://api.music.apple.com/v1/catalog/kr/playlists/";
@@ -8,8 +9,7 @@ exports.playlist =  async function (inpout) {
         'Content-type': 'application/json',
         'Authorization': 'Bearer ' + appletoken
       }
-    const id = inpout.split('/')[6].replace('?l=en', '')
-    baseurl = baseurl.concat(id);
+    baseurl = baseurl.concat(inpout);
     try {
         for (let index = 0; ; index++) {
             const test = await axios.get(baseurl, {headers})
@@ -60,6 +60,35 @@ exports.playlist =  async function (inpout) {
     return json
 }
 
+exports.albume_song =  async function (input) {
+    let json = []
+    let baseurl = "https://api.music.apple.com/v1/catalog/kr/songs/";
+    const headers = {
+        'Content-type': 'application/json',
+        'Authorization': 'Bearer ' + appletoken
+    }
+    baseurl = baseurl.concat(input);
+    const test = await axios.get(baseurl, {headers})
+
+    json = test.data.data[0].attributes.artistName + ' '+ test.data.data[0].attributes.name
+    return json
+}
+
+
 exports.albume =  async function (input) {
-    return input
+    let json = []
+    let baseurl = "https://api.music.apple.com/v1/catalog/kr/albums/";
+    const headers = {
+        'Content-type': 'application/json',
+        'Authorization': 'Bearer ' + appletoken
+    }
+    baseurl = baseurl.concat(input);
+    const test = await axios.get(baseurl, {headers})
+    for (let index = 0; index < test.data.data[0].relationships.tracks.data.length; index++) {
+        json.push({
+            artist : test.data.data[0].relationships.tracks.data[index].attributes.artistName,
+            title : test.data.data[0].relationships.tracks.data[index].attributes.name
+        })
+    }
+    return json
 }
