@@ -90,7 +90,7 @@ module.exports = {
 				if (!queue.connection) await queue.connect(interaction.member.voice.channel);
 			} catch {
 				queue.destroy();
-				return await interaction.getString({
+				return  interaction.reply({
 					content: "흠.. 이상하네요.. 봇이 안들어가지네요? 권한이나 아니면 봇상태를 확인해주세요.",
 					ephemeral: true
 				});

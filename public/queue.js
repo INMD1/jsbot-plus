@@ -9,7 +9,7 @@ module.exports = {
 		let Description = '';
 		try{
 			if(queue.tracks.length != 0){
-				for (let index = 0; index < queue.tracks.length - 1; index++) {
+				for (let index = 0; index < queue.tracks.length; index++) {
 					if(index < 20){
 						Description = Description.concat(`${index + 1}: ${queue.tracks[index].author}-${queue.tracks[index].title}\n`)
 					}
@@ -38,11 +38,11 @@ module.exports = {
 				});
 
 			}else{
-				interaction.reply("추가한 노래가 없서요.. 어서 추가해주세요!");		
+				 interaction.reply("추가한 노래가 없서요.. 어서 추가해주세요!");		
 			}
 		} catch(error) {
 			console.log(error);
-			interaction.reply("재생을 하시고 입력해주세요");
+			 interaction.reply("재생을 하시고 입력해주세요");
 		}
 	},
 };

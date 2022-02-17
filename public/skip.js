@@ -7,10 +7,10 @@ module.exports = {
 	async execute(interaction) {
         const queue = player.getQueue(interaction.guild.id);
         if(!queue.play){
-            interaction.reply("이 설정은 음악을 실행해야 설정할수 있습니다")
+             interaction.reply("이 설정은 음악을 실행해야 설정할수 있습니다")
         }else{
             if(queue.skip()){
-                interaction.reply("음악을 스킵했습니다.");
+                  interaction.reply("음악을 스킵했습니다.");
             }
         };
     },

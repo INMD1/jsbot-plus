@@ -107,14 +107,13 @@ module.exports = {
 						requestedBy: interaction.user
 					}).then(x => x.tracks[0]);
 					if (!track) return i.update({ content: `❌ | Track **${query}** not found!` , components: [], embeds: [] });
-					queue.play(track);
 					if(!json){ //쉽게 재생되면 샡기는 json형식이 없으면 처음으로 간주함
 						queue.play(track);
-						console.log(today + "guild id: "+  interaction.guild.id +" 검색하고 음악을 추가함");
+						console.log(today + " guild id: "+  interaction.guild.id +" 검색하고 음악을 바로 듣게 추가함");
 						return  i.update({ content: `✅ | 노래를 재생할게요 **${track.title}**!`, components: [], embeds: []  });
 					}else{ // 틀어져 있으면 추가하는 걸로 넘어감
 						json.insert(track);
-						console.log(today + "guild id: "+  interaction.guild.id +" 검색하고 음악을 추가함");
+						console.log(today + " guild id: "+  interaction.guild.id +" 검색하고 음악을 대가열에 추가함");
 						return  i.update({ content: `✅ | 노래를 추가 할게요 **${track.title}**!`, components: [], embeds: []  });
 					}
 				}	
