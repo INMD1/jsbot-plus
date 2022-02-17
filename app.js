@@ -29,7 +29,7 @@ for (const file of publicfile) {
 
 // 콘솔에 나타날 로그들
 client.once('ready', () => {
-	client.user.setActivity("v13 업데이트! /를 입력해주세요.")
+	client.user.setActivity("커맨드 정보는 /를 쳐주세요")
 	console.log('-----------------');
 	console.log('  운영체제 정보');
 	console.log('-----------------');
