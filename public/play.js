@@ -1,4 +1,5 @@
 const {SlashCommandBuilder} = require('@discordjs/builders');
+const playdl = require("play-dl");
 const apple = require('../module/applemoudle.js')
 const { appletoken } = require('../jsonfile/config.json');
 //아래는 실행 코드
@@ -19,10 +20,13 @@ module.exports = {
             const json = player.getQueue(interaction.guild.id);
             const query = interaction.options.getString("text");
             const queue = player.createQueue(interaction.guild.id, {
-                ytdlOptions: {
-                    filter: 'audioonly',
-                    highWaterMark: 1 << 30,
-                    dlChunkSize: 0,
+                async onBeforeCreateStream(track, source, _queue) {
+                    // only trap youtube source
+                    if (source === "youtube") {
+                        // track here would be youtube track
+                        return (await playdl.stream(track.url, { discordPlayerCompatibility : true })).stream;
+                        // we must return readable stream or void (returning void means telling discord-player to look for default extractor)
+                    }
                 },
                 metadata: {
                     channel: interaction.channel
