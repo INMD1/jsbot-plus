@@ -23,7 +23,7 @@ module.exports = {
                         .addOptions(seletmenu),
                 );
                 console.log(seletmenu);
-                interaction.reply({content: '삭제하고 싶은 곡을 선택해 주세요.',components: [row]});
+                interaction.reply({content: '삭제하고 싶은 곡을 선택해 주세요.',components: [row], ephemeral: true});
                 // console.log(interaction.author);
                 const filter = i => 
                     i.isSelectMenu() 
@@ -32,14 +32,18 @@ module.exports = {
                 const collector = interaction.channel.createMessageComponentCollector({ filter, time: 30000 });
                 collector.on('collect', async i => {
                     try {
-                        queue.tracks.splice(i.values[0])
-                        i.reply(seletmenu[i.values[0]].label + '이가 삭제되었습니다');                    
+                        if(i.values[0] == 0){
+                            queue.tracks.splice(0 , 1)
+                        }else{
+                            queue.tracks.splice(i.values[0] - 1 , 1)
+                        }
+                        i.reply('`' + seletmenu[i.values[0]].label+ '`'  + '이가 삭제되었습니다');                    
                     } catch (error) {
                         console.log(error);
                         i.reply('⚠️삭제도중 오류가 발생했습니다. 봇 제작자한데 오류를 알려주세요')
                     }
                 });
-                }
+            }
         } catch (error) {
             console.log(error);
             await interaction.reply('봇이 실행 안한 상태로 이 커맨드를 입력하면 오류가 발생할수 있습니다.');

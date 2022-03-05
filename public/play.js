@@ -1,4 +1,5 @@
 const {SlashCommandBuilder} = require('@discordjs/builders');
+const {createAudioResource, createAudioPlayer} = require('@discordjs/voice');
 const apple = require('../module/applemoudle.js')
 const { appletoken } = require('../jsonfile/config.json');
 //아래는 실행 코드
