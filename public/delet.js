@@ -22,7 +22,6 @@ module.exports = {
                         .setPlaceholder('Nothing selected')
                         .addOptions(seletmenu),
                 );
-                console.log(seletmenu);
                 interaction.reply({content: '삭제하고 싶은 곡을 선택해 주세요.',components: [row], ephemeral: true});
                 // console.log(interaction.author);
                 const filter = i => 
