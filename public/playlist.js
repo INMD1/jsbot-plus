@@ -1,6 +1,8 @@
 const {SlashCommandBuilder} = require('@discordjs/builders');
 const apple = require('../module/applemoudle.js');
 const { appletoken } = require('../jsonfile/config.json');
+const ytpl = require('ytpl');
+const { Collection } = require('discord.js');
 
 module.exports = {
 	//슬래시 커맨드 설정
@@ -28,12 +30,13 @@ module.exports = {
 
 		// //주소 가지고 오기
 		const query = interaction.options.getString("url");
-		console.log('================================================');
-		console.log("애플 뮤직 플레이 리스트링크:" + query);
-		console.log('================================================');
-
+		
 		//플레이리스트 정보 가지고 오기(여기로 다 값이 받고 내보내기함)
 		if (query.includes('music.apple.com')) {
+			console.log('================================================');
+			console.log("애플 뮤직 플레이 리스트링크:" + query);
+			console.log('================================================');
+	
 			//애플 토큰 아무것도 없으면 0으로 설정함
 			if(appletoken == 0) {
 				return interaction.reply("혹시 애플 토큰을 안넣으면 넣어주세요. 넣지않으면 애플 뮤직과 연관된 기능은 작동하지 않습니다.");
@@ -56,10 +59,15 @@ module.exports = {
 					return interaction.reply("플레이스트 또는 플레이리스트인 앨범 링크를 넣어주세요.");
 				}	
 			}
-		}else{
-			//조건에 일치하지 않는 url인 경우
-			interaction.reply("지원되지 않는 url 입니다.");			
-			return;
+		}else if(query.includes('music.apple.com')){
+			try {
+				const ytdl_url = new URLSearchParams(query);
+				const firstResultBatch = await ytpl(ytdl_url.get("https://www.youtube.com/playlist?list"), {pages: 3 })	
+				play(firstResultBatch.items);
+			} catch (error) {
+				console.log("error!");
+				return interaction.reply("현재 유투브는 유투브에 만든 플레이리스트는 재생이 안됨니다.");	
+			}
 		}
 
 		//이런 json형식으로 가져와야함
@@ -68,6 +76,7 @@ module.exports = {
 		//  ... n
 		// ]
 		
+		//애플 전용
 		async function play(input) {
 
 			//처음시작일때만
@@ -82,8 +91,6 @@ module.exports = {
 				}
 			});
 
-			//이건 몰류?
-			await interaction.deferReply();
 
 			//verify vc connection
 			try {
@@ -97,27 +104,48 @@ module.exports = {
 			}
 						
 				//재생시키는 코드
-				for (let index = 0; index < input.length; index++) {
-					//음악정보 조합
-					const music = input[index].artist + ' ' + input[index].title
-
+			for (let index = 0; index < input.length; index++) {
+					let music ="";
+					let SNS = 0
+					if (input[index].artist != undefined) {
+						//애플 음악정보 조합
+						 music = input[index].artist + ' ' + input[index].title	
+						 SNS = 1			
+					}else{
+						//유투브 음악정보 조합
+						 music = input[index].title
+					}
+					
 					//youtube에서 정보를 가져옴
 					const track = await player.search(music, {
 						requestedBy: interaction.user
 					}).then(x => x.tracks[0]);
-
+					
 					//만약 처음부타 시작이면
 				if (index == 0) {
 					queue.play(track);
-					if (!(input.length < 100)) {
-						await interaction.followUp({
-							content: `✅ | ${track.title} 노래를 재생하고 그다음 최대 200개 까지 추가 할게요!\n추가하는데 시간이 걸릴수 있서요 `
-						});
-					} else {
-						//100개 미만이면 이런 메세지를 전달함
-						await interaction.followUp({
-							content: `✅ | ${track.title} 노래를 재생하고 그다음 ${input.length - 1} 개를 추가 할게요!\n추가하는데 시간이 걸릴수 있서요`
-						});
+					if(SNS == 1){
+						if (!(input.length < 100)) {
+							await interaction.reply({
+								content: `✅ | ${track.title} 노래를 재생하고 그다음 최대 200개 까지 추가 할게요!\n추가하는데 시간이 걸릴수 있서요 `
+							});
+						} else {
+							//100개 미만이면 이런 메세지를 전달함
+							await interaction.reply({
+								content: `✅ | ${track.title} 노래를 재생하고 그다음 ${input.length - 1} 개를 추가 할게요!\n추가하는데 시간이 걸릴수 있서요`
+							});
+						}
+					}else{
+						if (!(input.length < 100)) {
+							await interaction.reply({
+								content: `✅ | ${track.title} 노래를 재생하고 그다음 최대 300개 까지 추가 할게요!\n추가하는데 시간이 걸릴수 있서요 `
+							});
+						} else {
+							//100개 미만이면 이런 메세지를 전달함
+							await interaction.reply({
+								content: `✅ | ${track.title} 노래를 재생하고 그다음 ${input.length - 1} 개를 추가 할게요!\n추가하는데 시간이 걸릴수 있서요`
+							});
+						}
 					}
 					console.log(today + " guild id: " + interaction.guild.id + " 플레이리스트를 추가함");
 				} else if (index < 200) {
@@ -134,7 +162,7 @@ module.exports = {
 						}
 					}
 				}
-			}
+			 }
 		}
 	}
 };
