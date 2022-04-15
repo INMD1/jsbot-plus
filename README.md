@@ -1,4 +1,4 @@
-# jsbot-plus(Beta)
+# jsbot-plus
 
 ## 개요
 이봇은 예전에 만든 javabotkR-plus의 지원을 멈추고 js로 봇을 제작중입니다.
